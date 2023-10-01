@@ -284,25 +284,25 @@ query "findings_group_by_severity" {
         jsonb_array_elements(resources) r
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       severity,
       count (*) as Total
     from
       findings
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end
@@ -337,25 +337,25 @@ query "findings_group_by_workflow_status" {
         jsonb_array_elements(resources) r
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       workflow_status,
       count (*) as Total
     from
       findings
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end
@@ -390,25 +390,25 @@ query "findings_group_by_compliance_status" {
         jsonb_array_elements(resources) r
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       compliance_status,
       count (*) as Total
     from
       findings
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end
@@ -443,25 +443,25 @@ query "findings_group_by_resource_type" {
         jsonb_array_elements(resources) r
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       resource_type,
       count (*) as Total
     from
       findings
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end
@@ -496,25 +496,25 @@ query "findings_group_by_resource_region" {
         jsonb_array_elements(resources) r
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       resource_region,
       count (*) as Total
     from
       findings
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end
@@ -549,25 +549,25 @@ query "findings_group_by_resource_account" {
         jsonb_array_elements(resources) r
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       resource_account,
       count (*) as Total
     from
       findings
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end
@@ -602,8 +602,8 @@ query "findings_count" {
         jsonb_array_elements(resources) r
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       'Findings' as label,
       count (*) as value,
       case
@@ -612,19 +612,19 @@ query "findings_count" {
       end as type
     from
       findings
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end
@@ -656,8 +656,8 @@ query "findings_table" {
         jsonb_array_elements(resources) r
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       resource_id,
       title,
       resource_region,
@@ -669,19 +669,19 @@ query "findings_table" {
       sh_region
     from
       findings
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end

@@ -285,8 +285,8 @@ query "findings_table_with_tags" {
       left join aws_tagging_resource a ON r ->> 'Id' = a.arn
       where
         record_state = 'ACTIVE'
-    ) 
-    select 
+    )
+    select
       resource_id,
       tags,
       title,
@@ -299,19 +299,19 @@ query "findings_table_with_tags" {
       sh_region
     from
       findings_with_tags
-    where 
+    where
       severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
       workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
       compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case 
+    case
         WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true 
+        ELSE true
     end and
-    case 
+    case
         WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
         ELSE true
     end and
-    case 
+    case
         WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
         ELSE true
     end
