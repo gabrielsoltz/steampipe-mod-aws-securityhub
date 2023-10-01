@@ -5,7 +5,7 @@ dashboard "securityhub_findings" {
 
     card {
       query = query.findings_count
-      title = "Total"
+      title = "Total (without Info)"
       width = 2
       args = {
         severity          = "CRITICAL,HIGH,MEDIUM,LOW"
@@ -94,6 +94,7 @@ dashboard "securityhub_findings" {
       option "HIGH" {}
       option "MEDIUM" {}
       option "LOW" {}
+      option "INFORMATIONAL" {}
     }
 
     input "workflow_status" {
