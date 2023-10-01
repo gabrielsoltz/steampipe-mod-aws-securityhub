@@ -1,6 +1,6 @@
 # Steampipe AWS Security Hub Mod
 
-This mod fetches security findings from AWS Security Hub and provides different views to analyze them. Some views combine findings with other sources informations to provide more context, for example tagging. 
+This mod fetches security findings from AWS Security Hub and provides different views to analyze them. Some views combine findings with other sources informations to provide more context, for example tagging.
 
 At the moment, only findings with the record state `ACTIVE` are fetched, this will be configurable in the future, but for visualizing findings, this is the most common use case (active findings).
 
