@@ -8,17 +8,13 @@ You can filter the findings by severity, workflow status, compliance status, etc
 
 ## Available Dashboards
 
-- [Security Hub Findings](dashboards/securityhub_findings.sp)
+[Security Hub Findings](dashboards/securityhub_findings.sp): This dashboard provides a view of all security findings in your AWS Security Hub account.
 
 <img src="docs/securityhub_findings.png" width="50%" type="thumbnail"/>
 
-This dashboard provides a view of all security findings in your AWS Security Hub account.
-
-- [Security Hub Findings with Tags](dashboards/securityhub_findings_with_tags.sp)
+[Security Hub Findings with Tags](dashboards/securityhub_findings_with_tags.sp): This dashboard provides a view of all security findings in your AWS Security Hub account and combine them with tags information by correlating with the information available in the AWS Resource Groups Tagging API (joining by ARN).
 
 <img src="docs/securityhub_findings_with_tags.png" width="50%" type="thumbnail"/>
-
-This dashboard provides a view of all security findings in your AWS Security Hub account and combine them with tags information by correlating with the information available in the AWS Resource Groups Tagging API (joining by ARN).
 
 ## To Do
 
