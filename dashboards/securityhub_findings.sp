@@ -265,318 +265,8 @@ dashboard "securityhub_findings" {
 
 }
 
-# To do: Maybe one only query with all the group bys that could be used for all the charts.
-
-query "findings_group_by_severity" {
-  sql = <<-EOQ
-    with findings as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      severity,
-      count (*) as Total
-    from
-      findings
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-    group by
-      severity
-    order by
-      Total desc
-EOQ
-
-  param "severity" {}
-  param "workflow_status" {}
-  param "compliance_status" {}
-  param "resource_type" {}
-  param "resource_region" {}
-  param "resource_account" {}
-}
-
-query "findings_group_by_workflow_status" {
-  sql = <<-EOQ
-    with findings as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      workflow_status,
-      count (*) as Total
-    from
-      findings
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-    group by
-      workflow_status
-    order by
-      Total desc
-EOQ
-
-  param "severity" {}
-  param "workflow_status" {}
-  param "compliance_status" {}
-  param "resource_type" {}
-  param "resource_region" {}
-  param "resource_account" {}
-}
-
-query "findings_group_by_compliance_status" {
-  sql = <<-EOQ
-    with findings as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      compliance_status,
-      count (*) as Total
-    from
-      findings
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-    group by
-      compliance_status
-    order by
-      Total desc
-EOQ
-
-  param "severity" {}
-  param "workflow_status" {}
-  param "compliance_status" {}
-  param "resource_type" {}
-  param "resource_region" {}
-  param "resource_account" {}
-}
-
-query "findings_group_by_resource_type" {
-  sql = <<-EOQ
-    with findings as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      resource_type,
-      count (*) as Total
-    from
-      findings
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-    group by
-      resource_type
-    order by
-      Total desc
-EOQ
-
-  param "severity" {}
-  param "workflow_status" {}
-  param "compliance_status" {}
-  param "resource_type" {}
-  param "resource_region" {}
-  param "resource_account" {}
-}
-
-query "findings_group_by_resource_region" {
-  sql = <<-EOQ
-    with findings as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      resource_region,
-      count (*) as Total
-    from
-      findings
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-    group by
-      resource_region
-    order by
-      Total desc
-EOQ
-
-  param "severity" {}
-  param "workflow_status" {}
-  param "compliance_status" {}
-  param "resource_type" {}
-  param "resource_region" {}
-  param "resource_account" {}
-}
-
-query "findings_group_by_resource_account" {
-  sql = <<-EOQ
-    with findings as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      resource_account,
-      count (*) as Total
-    from
-      findings
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-    group by
-      resource_account
-    order by
-      Total desc
-EOQ
-
+query "findings_table" {
+  sql = local.sh_findings_table_sql
   param "severity" {}
   param "workflow_status" {}
   param "compliance_status" {}
@@ -586,50 +276,7 @@ EOQ
 }
 
 query "findings_count" {
-  sql = <<-EOQ
-    with findings as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      'Findings' as label,
-      count (*) as value,
-      case
-          when count(*) > 0 then 'alert'
-          else 'ok'
-      end as type
-    from
-      findings
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-EOQ
-
+  sql = local.sh_findings_count_sql
   param "severity" {}
   param "workflow_status" {}
   param "compliance_status" {}
@@ -638,55 +285,58 @@ EOQ
   param "resource_account" {}
 }
 
-query "findings_table" {
-  sql = <<-EOQ
-    with findings as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        f.region as sh_region,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      resource_id,
-      title,
-      resource_region,
-      resource_account,
-      severity,
-      workflow_status,
-      compliance_status,
-      resource_type,
-      sh_region
-    from
-      findings
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-EOQ
+query "findings_group_by_severity" {
+  sql = replace(local.sh_findings_group_sql, "__GROUP_BY__", "severity")
+  param "severity" {}
+  param "workflow_status" {}
+  param "compliance_status" {}
+  param "resource_type" {}
+  param "resource_region" {}
+  param "resource_account" {}
+}
 
+query "findings_group_by_resource_account" {
+  sql = replace(local.sh_findings_group_sql, "__GROUP_BY__", "resource_account")
+  param "severity" {}
+  param "workflow_status" {}
+  param "compliance_status" {}
+  param "resource_type" {}
+  param "resource_region" {}
+  param "resource_account" {}
+}
+
+query "findings_group_by_workflow_status" {
+  sql = replace(local.sh_findings_group_sql, "__GROUP_BY__", "workflow_status")
+  param "severity" {}
+  param "workflow_status" {}
+  param "compliance_status" {}
+  param "resource_type" {}
+  param "resource_region" {}
+  param "resource_account" {}
+}
+
+query "findings_group_by_compliance_status" {
+  sql = replace(local.sh_findings_group_sql, "__GROUP_BY__", "compliance_status")
+  param "severity" {}
+  param "workflow_status" {}
+  param "compliance_status" {}
+  param "resource_type" {}
+  param "resource_region" {}
+  param "resource_account" {}
+}
+
+query "findings_group_by_resource_type" {
+  sql = replace(local.sh_findings_group_sql, "__GROUP_BY__", "resource_type")
+  param "severity" {}
+  param "workflow_status" {}
+  param "compliance_status" {}
+  param "resource_type" {}
+  param "resource_region" {}
+  param "resource_account" {}
+}
+
+query "findings_group_by_resource_region" {
+  sql = replace(local.sh_findings_group_sql, "__GROUP_BY__", "resource_region")
   param "severity" {}
   param "workflow_status" {}
   param "compliance_status" {}

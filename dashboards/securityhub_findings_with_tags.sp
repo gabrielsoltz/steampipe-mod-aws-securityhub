@@ -266,57 +266,7 @@ dashboard "securityhub_findings_with_tags" {
 }
 
 query "findings_table_with_tags" {
-  sql = <<-EOQ
-    with findings_with_tags as (
-      select
-        f.title,
-        f.severity ->> 'Original' as severity,
-        f.workflow_status,
-        f.compliance_status,
-        f.source_account_id as resource_account,
-        f.region as sh_region,
-        r ->> 'Type' as resource_type,
-        r ->> 'Id' as resource_id,
-        r ->> 'Region' as resource_region,
-        a.tags
-      from
-        aws_securityhub_finding f,
-        jsonb_array_elements(resources) r
-      left join aws_tagging_resource a ON r ->> 'Id' = a.arn
-      where
-        record_state = 'ACTIVE'
-    )
-    select
-      resource_id,
-      tags,
-      title,
-      resource_region,
-      resource_account,
-      severity,
-      workflow_status,
-      compliance_status,
-      resource_type,
-      sh_region
-    from
-      findings_with_tags
-    where
-      severity in (select UNNEST(STRING_TO_ARRAY($1, ',')) AS severity) and
-      workflow_status in (select UNNEST(STRING_TO_ARRAY($2, ',')) AS workflow_status) and
-      compliance_status in (select UNNEST(STRING_TO_ARRAY($3, ',')) AS compliance_status) and
-    case
-        WHEN $4 <> 'ALL' THEN resource_type in (select UNNEST(STRING_TO_ARRAY($4, ',')) AS resource_type)
-        ELSE true
-    end and
-    case
-        WHEN $5 <> 'ALL' THEN resource_region in (select UNNEST(STRING_TO_ARRAY($5, ',')) AS resource_region)
-        ELSE true
-    end and
-    case
-        WHEN $6 <> 'ALL' THEN resource_account in (select UNNEST(STRING_TO_ARRAY($6, ',')) AS resource_account)
-        ELSE true
-    end
-EOQ
-
+  sql = local.sh_findings_table_with_tags_sql
   param "severity" {}
   param "workflow_status" {}
   param "compliance_status" {}
