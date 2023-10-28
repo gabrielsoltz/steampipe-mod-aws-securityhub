@@ -7,19 +7,19 @@ locals {
 }
 
 # The AWS Security Hub Findings Table and Connection (connection.table)
-# Example AWS: aws_sh_master.aws_securityhub_finding
-# Example Local: public.local_aws_securityhub_finding
+# Example with AWS Connector: aws_sh_master.aws_securityhub_finding
+# Example with Local Table: public.local_aws_securityhub_finding
 variable "sh_findings_connection_table" {
   type = string
-  default = "aws_sh_master.aws_securityhub_finding"
+  default = "aws_securityhub_finding"
 }
 
 # The AWS Tagging Table and Connection (connection.table)
-# Example AWS: aws.aws_tagging_resource
-# Example Local: public.local_aws_tagging_resource
+# Example with AWS Aggregator: aws_all.aws_tagging_resource
+# Example with Local Table: public.local_aws_tagging_resource
 variable "aws_tagging_resources_table" {
   type = string
-  default = "aws.aws_tagging_resource"
+  default = "aws_tagging_resource"
 }
 
 # AWS Security Hub Aggregator Region.

@@ -56,7 +56,14 @@ AWS Security Hub can show findings from the same account running or configured t
 
 When reading from AWS Security Hub, which is from multiple accounts, you need to specify the steampipe connection to that account in this mod and avoid using an aggregator, as performance will be drastically affected, and findings could be duplicated.
 
-To define the connector for the master account, you need to set the variable `sh_findings_connection_table` in the `mod.sp` file. The value of this variable is the connector and the table name, which you don't need to change.
+To define the connector for the master account, you need to set the variable `sh_findings_connection_table` in the `mod.sp` file. The value of this variable is the connector and the table name, which you don't need to change, for example:
+
+```hcl
+variable "sh_findings_connection_table" {
+  type = string
+  default = "aws_sh_connector.aws_securityhub_finding"
+}
+```
 
 ### AWS Security Hub Region Aggregator
 
@@ -99,7 +106,6 @@ variable "aws_tagging_resources_table" {
 - [ ] Add more dashboards
 - [ ] Add custom metrics, like Time to Fix or Time to Notify
 - [ ] Make the initial query for fetching findings customizable (e.g., by record state)
-- [ ] Documentation
 
 ## Filters
 
