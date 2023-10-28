@@ -52,11 +52,11 @@ This mod uses the credentials configured in the [Steampipe AWS plugin](https://h
 
 ### AWS Security Hub Master Account
 
-AWS Security Hub can show findings from the same account running or configured to aggregate findings from multiple accounts and regions. If this is your case, continue reading.
+AWS Security Hub can manage security findings from a single account or aggregate findings from multiple accounts and regions. If this is your case, continue reading.
 
-When reading from AWS Security Hub, which is from multiple accounts, you need to specify the steampipe connection to that account in this mod and avoid using an aggregator, as performance will be drastically affected, and findings could be duplicated.
+When reading findings from AWS Security Hub when is aggregating multiple accounts, you must to specify the steampipe connection to that account in this mod and avoid using a connecton aggregator, as performance will be drastically affected, and findings could be duplicated.
 
-To define the connector for the master account, you need to set the variable `sh_findings_connection_table` in the `mod.sp` file. The value of this variable is the connector and the table name, which you don't need to change, for example:
+To define the connector for the master account, you need to set the variable `sh_findings_connection_table` in the `mod.sp` file. The value of this variable is the connector and the table name, which you don't need to change, for example, if your connection is called `aws_sh_connector` the value of the variable will be `aws_sh_connector.aws_securityhub_finding`.
 
 ```hcl
 variable "sh_findings_connection_table" {
